@@ -2,22 +2,25 @@ const express = require('express');
 const router = express.Router();
 const connection = require('../data/connection');
 
-
 router.get('/', (req, res)=>{
     connection.query('SELECT * FROM burgers;', function(err,data){
         if (err){
             return res.status(500).end
         }
-        const burgers = [];
+
+        var food=[];
         for (var i = 0; i < data.length; i ++){
-            if (data.eaten === 0){
-                burgers.append(data)
+            if (!data[i].eaten == 1){
+                food.push(data[i]);
+       
             }
         }
-        res.render("index", {burgers:burgers});
+        res.render('index', {burgers: food});
+        
         
     })
 })
+
 
 router.post('/', (req, res)=>{
     newBurger ={
@@ -34,7 +37,7 @@ router.post('/', (req, res)=>{
     res.redirect('/')
 });
 
-router.put("/", function(req, res) {
+router.put("/:id", function(req, res) {
     connection.query("UPDATE burgers SET eaten = ? WHERE id = ?", [1, req.params.id], function(err, result) {
       if (err) {
         // If an error occurred, send a generic server failure

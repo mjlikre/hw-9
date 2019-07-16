@@ -4,7 +4,7 @@
   {{#each burgers}}
   <li>
     <p>
-        {{this.burger}}
+        {{this.id}}.{{this.burgerName}}
       <button data-burgerid="{{this.id}}" class="delburger">Devour!</button>
     </p>
   </li>
@@ -24,15 +24,16 @@
   $(".delburger").on("click", function(event) {
     // Get the ID from the button.
     // This is shorthand for $(this).attr("data-planid")
-    var id = $(this).data("planid");
+    var id = $(this).data("burgerid");
 
-    // Send the DELETE request.
-    $.ajax("/api/plans/" + id, {
+c
+    
+    $.ajax("/api/burgers/" + id, {
       type: "PUT"
     }).then(
       function() {
         console.log("burger eaten ", id);
-        // Reload the page to get the updated list
+
         location.reload();
       }
     );
