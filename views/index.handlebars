@@ -1,0 +1,88 @@
+<h1>BurgerRestaurant</h1>
+
+<ul>
+  {{#each burgers}}
+  <li>
+    <p>
+        {{this.burger}}
+      <button data-burgerid="{{this.id}}" class="delburger">Devour!</button>
+    </p>
+  </li>
+  {{/each}}
+</ul>
+
+<h2>Make a Burger</h2>
+<form action = '/api/burgers' method= 'POST' >
+    <div class = 'form-group'>
+        <label for="burger">Burger</label>
+        <input type="text" name = 'burger' class 'form-control'>
+    </div>
+  <input type="submit" values = 'Add Member' class = 'btn btn-primary btw block'>
+</form>
+
+<script type="text/javascript">
+  $(".delburger").on("click", function(event) {
+    // Get the ID from the button.
+    // This is shorthand for $(this).attr("data-planid")
+    var id = $(this).data("planid");
+
+    // Send the DELETE request.
+    $.ajax("/api/plans/" + id, {
+      type: "PUT"
+    }).then(
+      function() {
+        console.log("burger eaten ", id);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+
+  $("#createBurger").on("submit", function(event) {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    // [name=plan] will find an element with a "name" attribute equal to the string "plan"
+    var newBurger = {
+      burger: $("#creatBurger [name=burger]").val().trim()
+    };
+
+    // Send the POST request.
+    $.ajax("/api/burgers", {
+      type: "POST",
+      data: newBurger
+    }).then(
+      function() {
+        console.log("made a new burger");
+        
+        location.reload();
+      }
+    );
+  });
+
+  $("#updateplan").on("submit", function(event) {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    // Get the ID by finding an element with a "name" attribute equal to the string "id"
+    var id = $("[name=id]").val().trim();
+
+    var updatedPlan = {
+      plan: $("#updateplan [name=plan]").val().trim()
+    };
+
+    // Send the PUT request.
+    $.ajax("/api/plans/" + id, {
+      type: "PUT",
+      data: updatedPlan
+    }).then(
+      function() {
+        console.log("updated id ", id);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+</script>
+
+
